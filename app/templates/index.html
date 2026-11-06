@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthTrack | Patient Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">✚</span>
+            <span>HealthTrack</span>
+        </div>
+
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <nav>
+    <a href="#overview" class="nav-link active">Overview</a>
+    <a href="#log-symptom" class="nav-link">Symptom Entry</a>
+    <a href="#history" class="nav-link">Health History</a>
+    <a href="#insights" class="nav-link">Health Insights</a>
+</nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">PATIENT HEALTH MONITORING</p>
+                <h1>Health Dashboard</h1>
+                <p class="subtitle">Monitor your symptoms and understand your health patterns.</p>
+            </div>
+
+            <div class="patient-box">
+                <label for="patientId">Patient ID</label>
+                <input id="patientId" type="text" value="P001">
+                <button id="loadButton" class="secondary-btn">Load</button>
+            </div>
+        </header>
+
+        <section id="overview" class="section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Overview</h2>
+                    <p>Your symptom monitoring summary</p>
+                </div>
+                <span class="date-badge" id="currentDate"></span>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">▤</div>
+                    <p>Total Entries</p>
+                    <h2 id="totalEntries">0</h2>
+                    <span>Last 7 days</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">◉</div>
+                    <p>Average Severity</p>
+                    <h2 id="averageSeverity">0/10</h2>
+                    <span>Last 7 days</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">⚑</div>
+                    <p>Highest Severity</p>
+                    <h2 id="highestSeverity">0/10</h2>
+                    <span>Last 7 days</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">✧</div>
+                    <p>Most Common</p>
+                    <h2 id="commonSymptom">--</h2>
+                    <span>Last 7 days</span>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="log-symptom" class="section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Log a Symptom</h2>
+                    <p>Record how you are feeling today.</p>
+                </div>
+            </div>
+
+            <div class="content-card">
+
+                <form id="symptomForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="symptom">Symptom *</label>
+                            <input
+                                type="text"
+                                id="symptom"
+                                placeholder="e.g. Headache, Fatigue"
+                                maxlength="200"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="entryDate">Date *</label>
+                            <input type="date" id="entryDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="duration">Duration (hours) *</label>
+                            <input
+                                type="number"
+                                id="duration"
+                                min="0.1"
+                                max="168"
+                                step="0.1"
+                                placeholder="e.g. 2"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trigger">Possible Trigger</label>
+                            <input
+                                type="text"
+                                id="trigger"
+                                placeholder="e.g. Lack of sleep"
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="form-group severity-group">
+                        <div class="severity-heading">
+                            <label for="severity">Symptom Severity *</label>
+                            <span id="severityValue">5 / 10</span>
+                        </div>
+
+                        <input
+                            type="range"
+                            id="severity"
+                            min="1"
+                            max="10"
+                            value="5"
+                        >
+
+                        <div class="range-labels">
+                            <span>1 - Mild</span>
+                            <span>10 - Severe</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+                        <textarea
+                            id="notes"
+                            rows="3"
+                            placeholder="Describe how you feel..."
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="primary-btn">
+                        + Save Symptom
+                    </button>
+
+                    <p id="formMessage" class="message" role="status" aria-live="polite"></p>
+
+                </form>
+
+            </div>
+        </section>
+
+        <section id="history" class="section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Recent Symptom History</h2>
+                    <p>Your symptom records from the last seven calendar days.</p>
+                </div>
+
+                <button id="refreshButton" class="secondary-btn">
+                    ↻ Refresh
+                </button>
+            </div>
+
+            <div class="content-card table-card">
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Symptom</th>
+                                <th>Severity</th>
+                                <th>Duration</th>
+                                <th>Possible Trigger</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="historyBody">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    No symptom records available.
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="insights" class="section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Health Insights</h2>
+                    <p>Patterns identified from your recorded symptoms.</p>
+                </div>
+                <span class="insight-badge">PATTERN ANALYSIS</span>
+            </div>
+
+            <div class="insight-grid">
+
+                <div class="content-card">
+                    <h3>Symptom Frequency</h3>
+                    <div id="frequencyChart">
+                        <p class="empty-state">No data available.</p>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <h3>Potential Patterns</h3>
+                    <div id="insightList">
+                        <p class="empty-state">No insights available yet.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="content-card trigger-card">
+                <h3>Potential Trigger Associations</h3>
+                <div id="triggerList">
+                    <p class="empty-state">No recurring trigger associations identified.</p>
+                </div>
+                <p class="disclaimer">
+                    These insights are based on patient-entered information.
+                    Associations do not establish medical causation and are
+                    not a substitute for professional medical advice.
+                </p>
+            </div>
+
+        </section>
+
+        <footer>
+            <p>© 2026 HealthTrack. Your health journey, one day at a time.</p>
+            <p>For health monitoring and informational purposes only.</p>
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

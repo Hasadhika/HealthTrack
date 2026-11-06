@@ -42,10 +42,6 @@ The application uses Python, FastAPI, SQLite, SQLAlchemy, and Pandas to provide 
 
 The application follows a modular architecture with separate components for frontend interaction, API handling, database operations, and insights generation.
 
-```mermaid
-<img width="2104" height="1104" alt="mermaid-diagram (1)" src="https://github.com/user-attachments/assets/e6ceff6e-9ede-4a84-ad60-0405b2135ab3" />
-
-
 ## Project Structure
 
 ```text
